@@ -6,10 +6,10 @@ type Rider struct {
 	LastName  string
 	Phone     string
 	Email     string
-	Addresses
+	Places
 }
 
-type Addresses struct {
+type Places struct {
 	Home       string
 	Work       string
 	Additional map[string]string

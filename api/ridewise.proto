@@ -15,10 +15,10 @@ message Rider {
     string last_name = 3;
     string phone = 4;
     string email = 5;
-    Addresses addresses = 6;
+    Places places = 6;
 }
 
-message Addresses {
+message Places {
     string home = 1;
     string work = 2;
     map<string, string> additional = 3;
@@ -47,7 +47,7 @@ message UpdateRiderRequest {
     string last_name = 3;
     string phone = 4;
     string email = 5;
-    Addresses addresses = 6;
+    Places places = 6;
 }
 
 message UpdateRiderResponse {
