@@ -19,17 +19,17 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	RiderService_RegisterRider_FullMethodName = "/RiderService/RegisterRider"
-	RiderService_GetRider_FullMethodName      = "/RiderService/GetRider"
-	RiderService_UpdateRider_FullMethodName   = "/RiderService/UpdateRider"
-	RiderService_DeleteRider_FullMethodName   = "/RiderService/DeleteRider"
+	RiderService_CreateRider_FullMethodName = "/RiderService/CreateRider"
+	RiderService_GetRider_FullMethodName    = "/RiderService/GetRider"
+	RiderService_UpdateRider_FullMethodName = "/RiderService/UpdateRider"
+	RiderService_DeleteRider_FullMethodName = "/RiderService/DeleteRider"
 )
 
 // RiderServiceClient is the client API for RiderService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type RiderServiceClient interface {
-	RegisterRider(ctx context.Context, in *RegisterRiderRequest, opts ...grpc.CallOption) (*RegisterRiderResponse, error)
+	CreateRider(ctx context.Context, in *CreateRiderRequest, opts ...grpc.CallOption) (*CreateRiderResponse, error)
 	GetRider(ctx context.Context, in *GetRiderRequest, opts ...grpc.CallOption) (*GetRiderResponse, error)
 	UpdateRider(ctx context.Context, in *UpdateRiderRequest, opts ...grpc.CallOption) (*UpdateRiderResponse, error)
 	DeleteRider(ctx context.Context, in *DeleteRiderRequest, opts ...grpc.CallOption) (*DeleteRiderResponse, error)
@@ -43,9 +43,9 @@ func NewRiderServiceClient(cc grpc.ClientConnInterface) RiderServiceClient {
 	return &riderServiceClient{cc}
 }
 
-func (c *riderServiceClient) RegisterRider(ctx context.Context, in *RegisterRiderRequest, opts ...grpc.CallOption) (*RegisterRiderResponse, error) {
-	out := new(RegisterRiderResponse)
-	err := c.cc.Invoke(ctx, RiderService_RegisterRider_FullMethodName, in, out, opts...)
+func (c *riderServiceClient) CreateRider(ctx context.Context, in *CreateRiderRequest, opts ...grpc.CallOption) (*CreateRiderResponse, error) {
+	out := new(CreateRiderResponse)
+	err := c.cc.Invoke(ctx, RiderService_CreateRider_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -83,7 +83,7 @@ func (c *riderServiceClient) DeleteRider(ctx context.Context, in *DeleteRiderReq
 // All implementations must embed UnimplementedRiderServiceServer
 // for forward compatibility
 type RiderServiceServer interface {
-	RegisterRider(context.Context, *RegisterRiderRequest) (*RegisterRiderResponse, error)
+	CreateRider(context.Context, *CreateRiderRequest) (*CreateRiderResponse, error)
 	GetRider(context.Context, *GetRiderRequest) (*GetRiderResponse, error)
 	UpdateRider(context.Context, *UpdateRiderRequest) (*UpdateRiderResponse, error)
 	DeleteRider(context.Context, *DeleteRiderRequest) (*DeleteRiderResponse, error)
@@ -94,8 +94,8 @@ type RiderServiceServer interface {
 type UnimplementedRiderServiceServer struct {
 }
 
-func (UnimplementedRiderServiceServer) RegisterRider(context.Context, *RegisterRiderRequest) (*RegisterRiderResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method RegisterRider not implemented")
+func (UnimplementedRiderServiceServer) CreateRider(context.Context, *CreateRiderRequest) (*CreateRiderResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateRider not implemented")
 }
 func (UnimplementedRiderServiceServer) GetRider(context.Context, *GetRiderRequest) (*GetRiderResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetRider not implemented")
@@ -119,20 +119,20 @@ func RegisterRiderServiceServer(s grpc.ServiceRegistrar, srv RiderServiceServer)
 	s.RegisterService(&RiderService_ServiceDesc, srv)
 }
 
-func _RiderService_RegisterRider_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(RegisterRiderRequest)
+func _RiderService_CreateRider_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateRiderRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(RiderServiceServer).RegisterRider(ctx, in)
+		return srv.(RiderServiceServer).CreateRider(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: RiderService_RegisterRider_FullMethodName,
+		FullMethod: RiderService_CreateRider_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(RiderServiceServer).RegisterRider(ctx, req.(*RegisterRiderRequest))
+		return srv.(RiderServiceServer).CreateRider(ctx, req.(*CreateRiderRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -199,8 +199,8 @@ var RiderService_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*RiderServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "RegisterRider",
-			Handler:    _RiderService_RegisterRider_Handler,
+			MethodName: "CreateRider",
+			Handler:    _RiderService_CreateRider_Handler,
 		},
 		{
 			MethodName: "GetRider",

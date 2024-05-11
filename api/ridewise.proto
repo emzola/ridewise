@@ -3,10 +3,10 @@ option go_package = "/gen";
 
 // -----------------Rider service-----------------
 service RiderService {
-    rpc RegisterRider(RegisterRiderRequest) returns (RegisterRiderResponse);
-    rpc GetRider(GetRiderRequest) returns (GetRiderResponse);
-    rpc UpdateRider(UpdateRiderRequest) returns (UpdateRiderResponse);
-    rpc DeleteRider(DeleteRiderRequest) returns (DeleteRiderResponse);
+    rpc CreateRider(CreateRiderRequest) returns (CreateRiderResponse){}
+    rpc GetRider(GetRiderRequest) returns (GetRiderResponse){}
+    rpc UpdateRider(UpdateRiderRequest) returns (UpdateRiderResponse){}
+    rpc DeleteRider(DeleteRiderRequest) returns (DeleteRiderResponse){}
 }
 
 message Rider {
@@ -14,8 +14,10 @@ message Rider {
     string first_name = 2;
     string last_name = 3;
     string phone = 4;
-    string email = 5;
-    Places places = 6;
+    bool activated = 5;
+    string email = 6;
+    bool email_verified = 7;
+    Places places = 8;
 }
 
 message Places {
@@ -24,13 +26,14 @@ message Places {
     map<string, string> additional = 3;
 }
 
-message RegisterRiderRequest {
+message CreateRiderRequest {
     string phone = 1;
 }
 
-message RegisterRiderResponse {
+message CreateRiderResponse {
     bool success = 1;
     string message = 2;
+    Rider created_rider = 3;
 }
 
 message GetRiderRequest {
@@ -53,6 +56,7 @@ message UpdateRiderRequest {
 message UpdateRiderResponse {
     bool success = 1;
     string message = 2;
+    Rider updated_rider = 3;
 }
 
 message DeleteRiderRequest {
@@ -63,5 +67,3 @@ message DeleteRiderResponse {
     bool success = 1;
     string message = 2;
 }
-
-
