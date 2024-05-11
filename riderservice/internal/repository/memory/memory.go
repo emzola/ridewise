@@ -18,6 +18,8 @@ func New() *Repository {
 }
 
 func (r *Repository) Create(ctx context.Context, phone string) (*model.Rider, error) {
+	r.Lock()
+	defer r.Unlock()
 	_, ok := r.data["uuid1"]
 	if ok {
 		return nil, repository.ErrDuplicatePhone

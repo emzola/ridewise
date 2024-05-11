@@ -1,5 +1,5 @@
 syntax = "proto3";
-option go_package = "/gen";
+option go_package = "/genproto";
 
 // -----------------Rider service-----------------
 service RiderService {
@@ -14,16 +14,15 @@ message Rider {
     string first_name = 2;
     string last_name = 3;
     string phone = 4;
-    bool activated = 5;
-    string email = 6;
-    bool email_verified = 7;
-    Places places = 8;
+    string email = 5;
+    bool is_verified = 6;
+    map<string, Location> saved_locations = 7;
 }
 
-message Places {
-    string home = 1;
-    string work = 2;
-    map<string, string> additional = 3;
+message Location {
+    string name = 1;
+    double latitude = 2;
+    double longitude = 3;
 }
 
 message CreateRiderRequest {
@@ -50,7 +49,7 @@ message UpdateRiderRequest {
     string last_name = 3;
     string phone = 4;
     string email = 5;
-    Places places = 6;
+    map<string, Location> saved_locations = 6;
 }
 
 message UpdateRiderResponse {

@@ -4,7 +4,7 @@
 // - protoc             v4.23.4
 // source: ridewise.proto
 
-package gen
+package genproto
 
 import (
 	context "context"

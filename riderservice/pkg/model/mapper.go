@@ -1,37 +1,49 @@
 package model
 
 import (
-	"github.com/emzola/ridewise/gen"
+	pb "github.com/emzola/ridewise/genproto"
 )
 
 // RiderToProto converts a Rider struct into a generated proto counterpart.
-func RiderToProto(r *Rider) *gen.Rider {
-	return &gen.Rider{
-		Id:        r.ID,
-		FirstName: r.FirstName,
-		LastName:  r.LastName,
-		Phone:     r.Phone,
-		Email:     r.Email,
-		Places: &gen.Places{
-			Home:       r.Places.Home,
-			Work:       r.Places.Work,
-			Additional: r.Places.Additional,
-		},
+func RiderToProto(rider *Rider) *pb.Rider {
+	riderProto := &pb.Rider{
+		Id:             rider.ID,
+		FirstName:      rider.FirstName,
+		LastName:       rider.LastName,
+		Phone:          rider.Phone,
+		Email:          rider.Email,
+		IsVerified:     rider.IsVerified,
+		SavedLocations: map[string]*pb.Location{},
 	}
+	// Convert saved locations
+	for key, location := range rider.SavedLocations {
+		riderProto.SavedLocations[key] = &pb.Location{
+			Name:      location.Name,
+			Latitude:  location.Latitude,
+			Longitude: location.Longitude,
+		}
+	}
+	return riderProto
 }
 
 // RiderFromProto converts a generated proto counterpart into a Rider struct.
-func RiderFromProto(r *gen.Rider) *Rider {
-	return &Rider{
-		ID:        r.Id,
-		FirstName: r.FirstName,
-		LastName:  r.LastName,
-		Phone:     r.Phone,
-		Email:     r.Email,
-		Places: Places{
-			Home:       r.Places.Home,
-			Work:       r.Places.Work,
-			Additional: r.Places.Additional,
-		},
+func RiderFromProto(riderProto *pb.Rider) *Rider {
+	rider := &Rider{
+		ID:             riderProto.Id,
+		FirstName:      riderProto.FirstName,
+		LastName:       riderProto.LastName,
+		Phone:          riderProto.Phone,
+		Email:          riderProto.Email,
+		IsVerified:     riderProto.IsVerified,
+		SavedLocations: map[string]Location{},
 	}
+	// Convert saved locations
+	for key, location := range riderProto.SavedLocations {
+		rider.SavedLocations[key] = Location{
+			Name:      location.Name,
+			Latitude:  location.Latitude,
+			Longitude: location.Longitude,
+		}
+	}
+	return rider
 }

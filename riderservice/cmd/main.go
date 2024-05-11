@@ -7,7 +7,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/emzola/ridewise/gen"
+	pb "github.com/emzola/ridewise/genproto"
 	"github.com/emzola/ridewise/riderservice/internal/controller/rider"
 	grpcHandler "github.com/emzola/ridewise/riderservice/internal/handler/grpc"
 	"github.com/emzola/ridewise/riderservice/internal/repository/memory"
@@ -44,7 +44,7 @@ func main() {
 	}
 	srv := grpc.NewServer()
 	reflection.Register(srv)
-	gen.RegisterRiderServiceServer(srv, handler)
+	pb.RegisterRiderServiceServer(srv, handler)
 	if err := srv.Serve(lis); err != nil {
 		panic(err)
 	}

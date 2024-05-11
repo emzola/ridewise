@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 
-	"github.com/emzola/ridewise/gen"
 	"github.com/emzola/ridewise/riderservice/internal/controller"
 	"github.com/emzola/ridewise/riderservice/internal/repository"
 	"github.com/emzola/ridewise/riderservice/pkg/model"
@@ -26,7 +25,6 @@ func New(repo riderRepository) *Controller {
 }
 
 func (c *Controller) Create(ctx context.Context, phone string) (*model.Rider, error) {
-	// TODO: Implement phone number validation
 	rider, err := c.repo.Create(ctx, phone)
 	if err != nil {
 		switch {
@@ -52,8 +50,8 @@ func (c *Controller) Get(ctx context.Context, id string) (*model.Rider, error) {
 	return rider, nil
 }
 
-func (c *Controller) Update(ctx context.Context, req *gen.UpdateRiderRequest) (*model.Rider, error) {
-	rider, err := c.repo.Get(ctx, req.Id)
+func (c *Controller) Update(ctx context.Context, req UpdateRiderRequest) (*model.Rider, error) {
+	rider, err := c.repo.Get(ctx, req.ID)
 	if err != nil {
 		switch {
 		case errors.Is(err, repository.ErrNotFound):
@@ -76,16 +74,8 @@ func (c *Controller) Update(ctx context.Context, req *gen.UpdateRiderRequest) (*
 	if req.Email != "" {
 		rider.Email = req.Email
 	}
-	if req.Places != nil {
-		if req.Places.Home != "" {
-			rider.Places.Home = req.Places.Home
-		}
-		if req.Places.Work != "" {
-			rider.Places.Work = req.Places.Work
-		}
-		if req.Places.Additional != nil {
-			rider.Places.Additional = req.Places.Additional
-		}
+	if req.SavedLocations != nil {
+		rider.SavedLocations = req.SavedLocations
 	}
 	err = c.repo.Update(ctx, rider)
 	if err != nil {
@@ -110,4 +100,13 @@ func (c *Controller) Delete(ctx context.Context, id string) error {
 		}
 	}
 	return nil
+}
+
+type UpdateRiderRequest struct {
+	ID             string
+	FirstName      string
+	LastName       string
+	Phone          string
+	Email          string
+	SavedLocations map[string]model.Location
 }
