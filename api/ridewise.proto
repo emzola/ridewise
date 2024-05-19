@@ -30,9 +30,7 @@ message CreateRiderRequest {
 }
 
 message CreateRiderResponse {
-    bool success = 1;
-    string message = 2;
-    Rider created_rider = 3;
+    Rider created_rider = 1;
 }
 
 message GetRiderRequest {
@@ -53,9 +51,7 @@ message UpdateRiderRequest {
 }
 
 message UpdateRiderResponse {
-    bool success = 1;
-    string message = 2;
-    Rider updated_rider = 3;
+    Rider updated_rider = 1;
 }
 
 message DeleteRiderRequest {
@@ -63,6 +59,5 @@ message DeleteRiderRequest {
 }
 
 message DeleteRiderResponse {
-    bool success = 1;
-    string message = 2;
+    string message = 1;
 }
