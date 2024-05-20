@@ -3,6 +3,7 @@ package grpc
 import (
 	"context"
 	"errors"
+	"time"
 
 	pb "github.com/emzola/ridewise/genproto"
 	"github.com/emzola/ridewise/riderservice/internal/controller"
@@ -26,6 +27,8 @@ func (h *Handler) CreateRider(ctx context.Context, req *pb.CreateRiderRequest) (
 	if req == nil || req.Phone == "" {
 		return nil, status.Errorf(codes.InvalidArgument, controller.ErrInvalidRequest.Error())
 	}
+	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
 	rider, err := h.ctrl.Create(ctx, req.Phone)
 	if err != nil {
 		code, errMsg := mapToGRPCErrorCode(err), err.Error()
@@ -38,6 +41,8 @@ func (h *Handler) GetRider(ctx context.Context, req *pb.GetRiderRequest) (*pb.Ge
 	if req == nil || req.Id == "" {
 		return nil, status.Errorf(codes.InvalidArgument, controller.ErrInvalidRequest.Error())
 	}
+	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
 	rider, err := h.ctrl.Get(ctx, req.Id)
 	if err != nil {
 		code, errMsg := mapToGRPCErrorCode(err), err.Error()
@@ -60,6 +65,8 @@ func (h *Handler) UpdateRider(ctx context.Context, req *pb.UpdateRiderRequest) (
 		Email:          req.Email,
 		SavedLocations: convertSavedLocations(req.SavedLocations),
 	}
+	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
 	rider, err := h.ctrl.Update(ctx, updateRequest)
 	if err != nil {
 		code, errMsg := mapToGRPCErrorCode(err), err.Error()
@@ -72,6 +79,8 @@ func (h *Handler) DeleteRider(ctx context.Context, req *pb.DeleteRiderRequest) (
 	if req == nil || req.Id == "" {
 		return nil, status.Errorf(codes.InvalidArgument, controller.ErrInvalidRequest.Error())
 	}
+	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
 	err := h.ctrl.Delete(ctx, req.Id)
 	if err != nil {
 		code, errMsg := mapToGRPCErrorCode(err), err.Error()
