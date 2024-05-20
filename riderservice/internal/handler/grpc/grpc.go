@@ -28,7 +28,8 @@ func (h *Handler) CreateRider(ctx context.Context, req *pb.CreateRiderRequest) (
 	}
 	rider, err := h.ctrl.Create(ctx, req.Phone)
 	if err != nil {
-		return nil, status.Errorf(mapToGRPCErrorCode(err), err.Error())
+		code, errMsg := mapToGRPCErrorCode(err), err.Error()
+		return nil, status.Errorf(code, errMsg)
 	}
 	return &pb.CreateRiderResponse{CreatedRider: model.RiderToProto(rider)}, nil
 }
@@ -39,7 +40,8 @@ func (h *Handler) GetRider(ctx context.Context, req *pb.GetRiderRequest) (*pb.Ge
 	}
 	rider, err := h.ctrl.Get(ctx, req.Id)
 	if err != nil {
-		return nil, status.Errorf(mapToGRPCErrorCode(err), err.Error())
+		code, errMsg := mapToGRPCErrorCode(err), err.Error()
+		return nil, status.Errorf(code, errMsg)
 	}
 	return &pb.GetRiderResponse{Rider: model.RiderToProto(rider)}, nil
 }
@@ -60,7 +62,8 @@ func (h *Handler) UpdateRider(ctx context.Context, req *pb.UpdateRiderRequest) (
 	}
 	rider, err := h.ctrl.Update(ctx, updateRequest)
 	if err != nil {
-		return nil, status.Errorf(mapToGRPCErrorCode(err), err.Error())
+		code, errMsg := mapToGRPCErrorCode(err), err.Error()
+		return nil, status.Errorf(code, errMsg)
 	}
 	return &pb.UpdateRiderResponse{UpdatedRider: model.RiderToProto(rider)}, nil
 }
@@ -71,7 +74,8 @@ func (h *Handler) DeleteRider(ctx context.Context, req *pb.DeleteRiderRequest) (
 	}
 	err := h.ctrl.Delete(ctx, req.Id)
 	if err != nil {
-		return nil, status.Errorf(mapToGRPCErrorCode(err), err.Error())
+		code, errMsg := mapToGRPCErrorCode(err), err.Error()
+		return nil, status.Errorf(code, errMsg)
 	}
 	return &pb.DeleteRiderResponse{Message: "Rider deleted successfully"}, nil
 }
@@ -90,7 +94,7 @@ func mapToGRPCErrorCode(err error) codes.Code {
 	}
 }
 
-// convertSavedLocations converts saved locations from protobuf to the expected map type.
+// ConvertSavedLocations converts saved locations from protobuf to the expected map type.
 func convertSavedLocations(pbLocations map[string]*pb.Location) map[string]model.Location {
 	savedLocations := map[string]model.Location{}
 	for key, location := range pbLocations {

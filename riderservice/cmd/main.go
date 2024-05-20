@@ -1,11 +1,15 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"log/slog"
 	"net"
 	"os"
+	"os/signal"
 	"path/filepath"
+	"sync"
+	"syscall"
 
 	pb "github.com/emzola/ridewise/genproto"
 	"github.com/emzola/ridewise/riderservice/internal/controller/rider"
@@ -35,6 +39,8 @@ func main() {
 	port := cfg.API.Port
 	logger.Info("starting the rider service", slog.Int("port", port))
 
+	_, cancel := context.WithCancel(context.Background())
+
 	repo := memory.New()
 	ctrl := rider.New(repo)
 	handler := grpcHandler.New(ctrl)
@@ -45,7 +51,23 @@ func main() {
 	srv := grpc.NewServer()
 	reflection.Register(srv)
 	pb.RegisterRiderServiceServer(srv, handler)
+
+	stop := make(chan os.Signal, 1)
+	signal.Notify(stop, syscall.SIGINT, syscall.SIGTERM)
+	var wg sync.WaitGroup
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		s := <-stop
+		cancel()
+		logger.Info("shutting down gracefully", slog.String("signal", s.String()))
+		srv.GracefulStop()
+		logger.Info("server stopped")
+	}()
+
 	if err := srv.Serve(lis); err != nil {
 		panic(err)
 	}
+
+	wg.Wait()
 }
