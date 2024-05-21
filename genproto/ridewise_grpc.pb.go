@@ -218,3 +218,204 @@ var RiderService_ServiceDesc = grpc.ServiceDesc{
 	Streams:  []grpc.StreamDesc{},
 	Metadata: "ridewise.proto",
 }
+
+const (
+	AuthenticationService_GenerateOTP_FullMethodName     = "/AuthenticationService/generateOTP"
+	AuthenticationService_VerifyOTP_FullMethodName       = "/AuthenticationService/VerifyOTP"
+	AuthenticationService_RefreshToken_FullMethodName    = "/AuthenticationService/RefreshToken"
+	AuthenticationService_InvalidateToken_FullMethodName = "/AuthenticationService/InvalidateToken"
+)
+
+// AuthenticationServiceClient is the client API for AuthenticationService service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+type AuthenticationServiceClient interface {
+	GenerateOTP(ctx context.Context, in *GenerateOTPRequest, opts ...grpc.CallOption) (*GenerateOTPResponse, error)
+	VerifyOTP(ctx context.Context, in *VerifyOTPRequest, opts ...grpc.CallOption) (*VerifyOTPResponse, error)
+	RefreshToken(ctx context.Context, in *RefreshTokenRequest, opts ...grpc.CallOption) (*RefreshTokenResponse, error)
+	InvalidateToken(ctx context.Context, in *InvalidateTokenRequest, opts ...grpc.CallOption) (*InvalidateTokenResponse, error)
+}
+
+type authenticationServiceClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewAuthenticationServiceClient(cc grpc.ClientConnInterface) AuthenticationServiceClient {
+	return &authenticationServiceClient{cc}
+}
+
+func (c *authenticationServiceClient) GenerateOTP(ctx context.Context, in *GenerateOTPRequest, opts ...grpc.CallOption) (*GenerateOTPResponse, error) {
+	out := new(GenerateOTPResponse)
+	err := c.cc.Invoke(ctx, AuthenticationService_GenerateOTP_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *authenticationServiceClient) VerifyOTP(ctx context.Context, in *VerifyOTPRequest, opts ...grpc.CallOption) (*VerifyOTPResponse, error) {
+	out := new(VerifyOTPResponse)
+	err := c.cc.Invoke(ctx, AuthenticationService_VerifyOTP_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *authenticationServiceClient) RefreshToken(ctx context.Context, in *RefreshTokenRequest, opts ...grpc.CallOption) (*RefreshTokenResponse, error) {
+	out := new(RefreshTokenResponse)
+	err := c.cc.Invoke(ctx, AuthenticationService_RefreshToken_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *authenticationServiceClient) InvalidateToken(ctx context.Context, in *InvalidateTokenRequest, opts ...grpc.CallOption) (*InvalidateTokenResponse, error) {
+	out := new(InvalidateTokenResponse)
+	err := c.cc.Invoke(ctx, AuthenticationService_InvalidateToken_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// AuthenticationServiceServer is the server API for AuthenticationService service.
+// All implementations must embed UnimplementedAuthenticationServiceServer
+// for forward compatibility
+type AuthenticationServiceServer interface {
+	GenerateOTP(context.Context, *GenerateOTPRequest) (*GenerateOTPResponse, error)
+	VerifyOTP(context.Context, *VerifyOTPRequest) (*VerifyOTPResponse, error)
+	RefreshToken(context.Context, *RefreshTokenRequest) (*RefreshTokenResponse, error)
+	InvalidateToken(context.Context, *InvalidateTokenRequest) (*InvalidateTokenResponse, error)
+	mustEmbedUnimplementedAuthenticationServiceServer()
+}
+
+// UnimplementedAuthenticationServiceServer must be embedded to have forward compatible implementations.
+type UnimplementedAuthenticationServiceServer struct {
+}
+
+func (UnimplementedAuthenticationServiceServer) GenerateOTP(context.Context, *GenerateOTPRequest) (*GenerateOTPResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GenerateOTP not implemented")
+}
+func (UnimplementedAuthenticationServiceServer) VerifyOTP(context.Context, *VerifyOTPRequest) (*VerifyOTPResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method VerifyOTP not implemented")
+}
+func (UnimplementedAuthenticationServiceServer) RefreshToken(context.Context, *RefreshTokenRequest) (*RefreshTokenResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RefreshToken not implemented")
+}
+func (UnimplementedAuthenticationServiceServer) InvalidateToken(context.Context, *InvalidateTokenRequest) (*InvalidateTokenResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method InvalidateToken not implemented")
+}
+func (UnimplementedAuthenticationServiceServer) mustEmbedUnimplementedAuthenticationServiceServer() {}
+
+// UnsafeAuthenticationServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to AuthenticationServiceServer will
+// result in compilation errors.
+type UnsafeAuthenticationServiceServer interface {
+	mustEmbedUnimplementedAuthenticationServiceServer()
+}
+
+func RegisterAuthenticationServiceServer(s grpc.ServiceRegistrar, srv AuthenticationServiceServer) {
+	s.RegisterService(&AuthenticationService_ServiceDesc, srv)
+}
+
+func _AuthenticationService_GenerateOTP_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GenerateOTPRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AuthenticationServiceServer).GenerateOTP(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AuthenticationService_GenerateOTP_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AuthenticationServiceServer).GenerateOTP(ctx, req.(*GenerateOTPRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AuthenticationService_VerifyOTP_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(VerifyOTPRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AuthenticationServiceServer).VerifyOTP(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AuthenticationService_VerifyOTP_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AuthenticationServiceServer).VerifyOTP(ctx, req.(*VerifyOTPRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AuthenticationService_RefreshToken_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RefreshTokenRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AuthenticationServiceServer).RefreshToken(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AuthenticationService_RefreshToken_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AuthenticationServiceServer).RefreshToken(ctx, req.(*RefreshTokenRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AuthenticationService_InvalidateToken_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(InvalidateTokenRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AuthenticationServiceServer).InvalidateToken(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AuthenticationService_InvalidateToken_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AuthenticationServiceServer).InvalidateToken(ctx, req.(*InvalidateTokenRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+// AuthenticationService_ServiceDesc is the grpc.ServiceDesc for AuthenticationService service.
+// It's only intended for direct use with grpc.RegisterService,
+// and not to be introspected or modified (even as a copy)
+var AuthenticationService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "AuthenticationService",
+	HandlerType: (*AuthenticationServiceServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "generateOTP",
+			Handler:    _AuthenticationService_GenerateOTP_Handler,
+		},
+		{
+			MethodName: "VerifyOTP",
+			Handler:    _AuthenticationService_VerifyOTP_Handler,
+		},
+		{
+			MethodName: "RefreshToken",
+			Handler:    _AuthenticationService_RefreshToken_Handler,
+		},
+		{
+			MethodName: "InvalidateToken",
+			Handler:    _AuthenticationService_InvalidateToken_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "ridewise.proto",
+}

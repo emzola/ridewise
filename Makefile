@@ -11,3 +11,8 @@ protoc:
 .PHONY: run/rider
 run/rider:
 	@go run riderservice/cmd/*.go
+
+## run/authentication: run the authentication service
+.PHONY: run/authentication
+run/authentication:
+	@go run authenticationservice/cmd/*.go
