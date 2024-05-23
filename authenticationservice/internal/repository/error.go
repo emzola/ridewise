@@ -3,7 +3,7 @@ package repository
 import "errors"
 
 var (
-	ErrNotFound            = errors.New("the requested resource could not be found")
+	ErrNotFound            = errors.New("not found")
 	ErrInvalidOTP          = errors.New("invalid or expired OTP")
 	ErrInvalidRefreshToken = errors.New("invalid refresh token")
 )

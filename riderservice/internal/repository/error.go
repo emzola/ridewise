@@ -3,7 +3,7 @@ package repository
 import "errors"
 
 var (
-	ErrNotFound       = errors.New("the requested resource could not be found")
-	ErrDuplicatePhone = errors.New("a user with this phone number already exists")
-	ErrDuplicateEmail = errors.New("a user with the email address already exists")
+	ErrNotFound       = errors.New("not found")
+	ErrDuplicatePhone = errors.New("phone number already exists")
+	ErrDuplicateEmail = errors.New("email already exists")
 )
