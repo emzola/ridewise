@@ -1,6 +1,7 @@
 package memory
 
 import (
+	"context"
 	"sync"
 	"time"
 
@@ -21,14 +22,14 @@ func New() *Repository {
 	}
 }
 
-func (r *Repository) SaveOTP(phone string, otp string, expiry time.Time) error {
+func (r *Repository) SaveOTP(ctx context.Context, phoneNumber string, otp string, expiry time.Time) error {
 	r.Lock()
 	defer r.Unlock()
-	r.otps[phone] = model.OTPRecord{OTP: otp, Expiry: expiry}
+	r.otps[phoneNumber] = model.OTPRecord{OTP: otp, Expiry: expiry}
 	return nil
 }
 
-func (r *Repository) GetPhoneNumberByOTP(otp string) (string, error) {
+func (r *Repository) GetPhoneNumberByOTP(ctx context.Context, otp string) (string, error) {
 	r.RLock()
 	defer r.RUnlock()
 	var phoneNumber string
@@ -43,7 +44,7 @@ func (r *Repository) GetPhoneNumberByOTP(otp string) (string, error) {
 	return phoneNumber, nil
 }
 
-func (r *Repository) VerifyOTP(phone string, otp string) (bool, error) {
+func (r *Repository) VerifyOTP(ctx context.Context, phone string, otp string) (bool, error) {
 	r.RLock()
 	defer r.RUnlock()
 	record, ok := r.otps[phone]
@@ -53,9 +54,19 @@ func (r *Repository) VerifyOTP(phone string, otp string) (bool, error) {
 	return true, nil
 }
 
-func (r *Repository) SaveRefreshToken(phone string, refreshToken string) error {
+func (r *Repository) SaveRefreshToken(ctx context.Context, phoneNumber string, refreshToken string) error {
 	r.Lock()
 	defer r.Unlock()
-	r.refreshTokens[refreshToken] = phone
+	r.refreshTokens[refreshToken] = phoneNumber
 	return nil
+}
+
+func (r *Repository) GetPhoneNumberByRefreshToken(ctx context.Context, refreshToken string) (string, error) {
+	r.RLock()
+	defer r.RUnlock()
+	phoneNumber, ok := r.refreshTokens[refreshToken]
+	if !ok {
+		return "", repository.ErrNotFound
+	}
+	return phoneNumber, nil
 }

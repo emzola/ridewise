@@ -64,17 +64,17 @@ message DeleteRiderResponse {
 
 // -----------------Authentication service-----------------
 service AuthenticationService {
-    rpc GenerateOTP(generateOTPRequest) returns (generateOTPResponse);
+    rpc GenerateOTP(GenerateOTPRequest) returns (GenerateOTPResponse);
     rpc VerifyOTP(VerifyOTPRequest) returns (VerifyOTPResponse);
     rpc RefreshToken(RefreshTokenRequest) returns (RefreshTokenResponse);
     rpc DeleteRefreshToken(DeleteRefreshTokenRequest) returns (DeleteRefreshTokenResponse);
 }
 
-message generateOTPRequest {
+message GenerateOTPRequest {
     string phone_number = 1;
 }
 
-message generateOTPResponse {
+message GenerateOTPResponse {
     string otp = 1;
 }
 
