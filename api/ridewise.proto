@@ -1,7 +1,7 @@
 syntax = "proto3";
 option go_package = "/genproto";
 
-// -----------------Rider service-----------------
+// -----------------Rider Service-----------------
 service RiderService {
     rpc CreateRider(CreateRiderRequest) returns (CreateRiderResponse);
     rpc GetRider(GetRiderRequest) returns (GetRiderResponse);
@@ -62,7 +62,7 @@ message DeleteRiderResponse {
     string message = 1;
 }
 
-// -----------------Authentication service-----------------
+// -----------------Authentication Service-----------------
 service AuthenticationService {
     rpc GenerateOTP(GenerateOTPRequest) returns (GenerateOTPResponse);
     rpc VerifyOTP(VerifyOTPRequest) returns (VerifyOTPResponse);
@@ -100,5 +100,20 @@ message DeleteRefreshTokenRequest {
 }
 
 message DeleteRefreshTokenResponse {
+    string message = 1;
+}
+
+// -----------------SMS Notification Service-----------------
+service SMSNotificationService {
+    rpc SendSMS (SendSMSRequest) returns (SendSMSResponse);
+}
+
+message SendSMSRequest {
+    string content = 1;
+    string from = 2;
+    string to = 3;
+}
+
+message SendSMSResponse {
     string message = 1;
 }

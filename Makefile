@@ -1,3 +1,5 @@
+include .envrc
+
 # ==================================================================================== #
 # DEVELOPMENT
 # ==================================================================================== #
@@ -16,3 +18,8 @@ run/rider:
 .PHONY: run/authentication
 run/authentication:
 	@go run authenticationservice/cmd/*.go
+
+## run/sms: run the sms notification service
+.PHONY: run/sms
+run/sms:
+	@go run smsnotificationservice/cmd/*.go
