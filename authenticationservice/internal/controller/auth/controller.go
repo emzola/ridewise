@@ -120,5 +120,5 @@ func generateToken(phoneNumber string, duration time.Duration) (string, error) {
 		"phone": phoneNumber,
 		"exp":   time.Now().Add(duration).Unix(),
 	})
-	return token.SignedString([]byte(os.Getenv("SECRET")))
+	return token.SignedString([]byte(os.Getenv("JWTSECRET")))
 }
