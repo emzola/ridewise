@@ -220,10 +220,10 @@ var RiderService_ServiceDesc = grpc.ServiceDesc{
 }
 
 const (
-	AuthenticationService_GenerateOTP_FullMethodName     = "/AuthenticationService/generateOTP"
-	AuthenticationService_VerifyOTP_FullMethodName       = "/AuthenticationService/VerifyOTP"
-	AuthenticationService_RefreshToken_FullMethodName    = "/AuthenticationService/RefreshToken"
-	AuthenticationService_InvalidateToken_FullMethodName = "/AuthenticationService/InvalidateToken"
+	AuthenticationService_GenerateOTP_FullMethodName        = "/AuthenticationService/GenerateOTP"
+	AuthenticationService_VerifyOTP_FullMethodName          = "/AuthenticationService/VerifyOTP"
+	AuthenticationService_RefreshToken_FullMethodName       = "/AuthenticationService/RefreshToken"
+	AuthenticationService_DeleteRefreshToken_FullMethodName = "/AuthenticationService/DeleteRefreshToken"
 )
 
 // AuthenticationServiceClient is the client API for AuthenticationService service.
@@ -233,7 +233,7 @@ type AuthenticationServiceClient interface {
 	GenerateOTP(ctx context.Context, in *GenerateOTPRequest, opts ...grpc.CallOption) (*GenerateOTPResponse, error)
 	VerifyOTP(ctx context.Context, in *VerifyOTPRequest, opts ...grpc.CallOption) (*VerifyOTPResponse, error)
 	RefreshToken(ctx context.Context, in *RefreshTokenRequest, opts ...grpc.CallOption) (*RefreshTokenResponse, error)
-	InvalidateToken(ctx context.Context, in *InvalidateTokenRequest, opts ...grpc.CallOption) (*InvalidateTokenResponse, error)
+	DeleteRefreshToken(ctx context.Context, in *DeleteRefreshTokenRequest, opts ...grpc.CallOption) (*DeleteRefreshTokenResponse, error)
 }
 
 type authenticationServiceClient struct {
@@ -271,9 +271,9 @@ func (c *authenticationServiceClient) RefreshToken(ctx context.Context, in *Refr
 	return out, nil
 }
 
-func (c *authenticationServiceClient) InvalidateToken(ctx context.Context, in *InvalidateTokenRequest, opts ...grpc.CallOption) (*InvalidateTokenResponse, error) {
-	out := new(InvalidateTokenResponse)
-	err := c.cc.Invoke(ctx, AuthenticationService_InvalidateToken_FullMethodName, in, out, opts...)
+func (c *authenticationServiceClient) DeleteRefreshToken(ctx context.Context, in *DeleteRefreshTokenRequest, opts ...grpc.CallOption) (*DeleteRefreshTokenResponse, error) {
+	out := new(DeleteRefreshTokenResponse)
+	err := c.cc.Invoke(ctx, AuthenticationService_DeleteRefreshToken_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -287,7 +287,7 @@ type AuthenticationServiceServer interface {
 	GenerateOTP(context.Context, *GenerateOTPRequest) (*GenerateOTPResponse, error)
 	VerifyOTP(context.Context, *VerifyOTPRequest) (*VerifyOTPResponse, error)
 	RefreshToken(context.Context, *RefreshTokenRequest) (*RefreshTokenResponse, error)
-	InvalidateToken(context.Context, *InvalidateTokenRequest) (*InvalidateTokenResponse, error)
+	DeleteRefreshToken(context.Context, *DeleteRefreshTokenRequest) (*DeleteRefreshTokenResponse, error)
 	mustEmbedUnimplementedAuthenticationServiceServer()
 }
 
@@ -304,8 +304,8 @@ func (UnimplementedAuthenticationServiceServer) VerifyOTP(context.Context, *Veri
 func (UnimplementedAuthenticationServiceServer) RefreshToken(context.Context, *RefreshTokenRequest) (*RefreshTokenResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RefreshToken not implemented")
 }
-func (UnimplementedAuthenticationServiceServer) InvalidateToken(context.Context, *InvalidateTokenRequest) (*InvalidateTokenResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method InvalidateToken not implemented")
+func (UnimplementedAuthenticationServiceServer) DeleteRefreshToken(context.Context, *DeleteRefreshTokenRequest) (*DeleteRefreshTokenResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteRefreshToken not implemented")
 }
 func (UnimplementedAuthenticationServiceServer) mustEmbedUnimplementedAuthenticationServiceServer() {}
 
@@ -374,20 +374,20 @@ func _AuthenticationService_RefreshToken_Handler(srv interface{}, ctx context.Co
 	return interceptor(ctx, in, info, handler)
 }
 
-func _AuthenticationService_InvalidateToken_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(InvalidateTokenRequest)
+func _AuthenticationService_DeleteRefreshToken_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteRefreshTokenRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AuthenticationServiceServer).InvalidateToken(ctx, in)
+		return srv.(AuthenticationServiceServer).DeleteRefreshToken(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: AuthenticationService_InvalidateToken_FullMethodName,
+		FullMethod: AuthenticationService_DeleteRefreshToken_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AuthenticationServiceServer).InvalidateToken(ctx, req.(*InvalidateTokenRequest))
+		return srv.(AuthenticationServiceServer).DeleteRefreshToken(ctx, req.(*DeleteRefreshTokenRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -400,7 +400,7 @@ var AuthenticationService_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*AuthenticationServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "generateOTP",
+			MethodName: "GenerateOTP",
 			Handler:    _AuthenticationService_GenerateOTP_Handler,
 		},
 		{
@@ -412,8 +412,8 @@ var AuthenticationService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _AuthenticationService_RefreshToken_Handler,
 		},
 		{
-			MethodName: "InvalidateToken",
-			Handler:    _AuthenticationService_InvalidateToken_Handler,
+			MethodName: "DeleteRefreshToken",
+			Handler:    _AuthenticationService_DeleteRefreshToken_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

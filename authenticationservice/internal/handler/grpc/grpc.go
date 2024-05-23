@@ -21,15 +21,32 @@ func New(ctrl *auth.Controller) *Handler {
 }
 
 func (h *Handler) GenerateOTP(ctx context.Context, req *pb.GenerateOTPRequest) (*pb.GenerateOTPResponse, error) {
-	if req == nil || req.Phone == "" {
+	if req == nil || req.PhoneNumber == "" {
 		return nil, status.Errorf(codes.InvalidArgument, controller.ErrInvalidRequest.Error())
 	}
-	otp, err := h.ctrl.GenerateOTP(req.Phone)
+	otp, err := h.ctrl.GenerateOTP(req.PhoneNumber)
 	if err != nil {
 		code, errMsg := mapToGRPCErrorCode(err), err.Error()
 		return nil, status.Errorf(code, errMsg)
 	}
 	return &pb.GenerateOTPResponse{Otp: otp}, nil
+}
+
+func (h *Handler) VerifyOTP(ctx context.Context, req *pb.VerifyOTPRequest) (*pb.VerifyOTPResponse, error) {
+	if req == nil || req.Otp == "" {
+		return nil, status.Errorf(codes.InvalidArgument, controller.ErrInvalidRequest.Error())
+	}
+	phoneNumber, err := h.ctrl.GetPhoneNumberByOTP(req.Otp)
+	if err != nil {
+		code, errMsg := mapToGRPCErrorCode(err), err.Error()
+		return nil, status.Errorf(code, errMsg)
+	}
+	accessToken, refreshToken, err := h.ctrl.VerifyOTP(phoneNumber, req.Otp)
+	if err != nil {
+		code, errMsg := mapToGRPCErrorCode(err), err.Error()
+		return nil, status.Errorf(code, errMsg)
+	}
+	return &pb.VerifyOTPResponse{AccessToken: accessToken, RefreshToken: refreshToken}, nil
 }
 
 // mapToGRPCErrorCode maps domain-specific errors to gRPC status codes.
@@ -39,6 +56,8 @@ func mapToGRPCErrorCode(err error) codes.Code {
 		return codes.NotFound
 	case errors.Is(err, controller.ErrInvalidRequest):
 		return codes.InvalidArgument
+	case errors.Is(err, controller.ErrInvalidOTP):
+		return codes.Unauthenticated
 	default:
 		return codes.Internal
 	}
