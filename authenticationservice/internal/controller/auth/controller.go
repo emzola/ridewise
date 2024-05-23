@@ -4,12 +4,15 @@ import (
 	"context"
 	"crypto/rand"
 	"encoding/binary"
+	"errors"
 	"fmt"
+	"os"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
 
 	"github.com/emzola/ridewise/authenticationservice/internal/controller"
+	"github.com/emzola/ridewise/authenticationservice/internal/repository"
 )
 
 const (
@@ -23,6 +26,7 @@ type authRepository interface {
 	VerifyOTP(ctx context.Context, phoneNumber string, otp string) (bool, error)
 	SaveRefreshToken(ctx context.Context, phoneNumber string, refreshToken string) error
 	GetPhoneNumberByRefreshToken(ctx context.Context, refreshToken string) (string, error)
+	DeleteRefreshToken(ctx context.Context, refreshToken string) error
 }
 
 type Controller struct {
@@ -48,7 +52,12 @@ func (c *Controller) GenerateOTP(ctx context.Context, phoneNumber string) (strin
 func (c *Controller) GetPhoneNumberByOTP(ctx context.Context, otp string) (string, error) {
 	phoneNumber, err := c.repo.GetPhoneNumberByOTP(ctx, otp)
 	if err != nil {
-		return "", controller.ErrNotFound
+		switch {
+		case errors.Is(err, repository.ErrNotFound):
+			return "", controller.ErrNotFound
+		default:
+			return "", err
+		}
 	}
 	return phoneNumber, nil
 }
@@ -81,6 +90,19 @@ func (c *Controller) RefreshToken(ctx context.Context, refreshToken string) (str
 	return generateToken(phoneNumber, accessTokenDuration)
 }
 
+func (c *Controller) DeleteRefreshToken(ctx context.Context, refreshToken string) error {
+	err := c.repo.DeleteRefreshToken(ctx, refreshToken)
+	if err != nil {
+		switch {
+		case errors.Is(err, repository.ErrNotFound):
+			return controller.ErrNotFound
+		default:
+			return err
+		}
+	}
+	return nil
+}
+
 // generateSecureOTP generates a secure 6-digit OTP.
 func generateSecureOTP() (string, error) {
 	var n uint32
@@ -98,5 +120,5 @@ func generateToken(phoneNumber string, duration time.Duration) (string, error) {
 		"phone": phoneNumber,
 		"exp":   time.Now().Add(duration).Unix(),
 	})
-	return token.SignedString([]byte("secret"))
+	return token.SignedString([]byte(os.Getenv("SECRET")))
 }

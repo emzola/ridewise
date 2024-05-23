@@ -70,3 +70,13 @@ func (r *Repository) GetPhoneNumberByRefreshToken(ctx context.Context, refreshTo
 	}
 	return phoneNumber, nil
 }
+
+func (r *Repository) DeleteRefreshToken(ctx context.Context, refreshToken string) error {
+	r.Lock()
+	defer r.Unlock()
+	if _, ok := r.refreshTokens[refreshToken]; !ok {
+		return repository.ErrNotFound
+	}
+	delete(r.refreshTokens, refreshToken)
+	return nil
+}

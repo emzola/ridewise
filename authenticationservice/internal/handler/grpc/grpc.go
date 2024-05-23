@@ -61,6 +61,18 @@ func (h *Handler) RefreshToken(ctx context.Context, req *pb.RefreshTokenRequest)
 	return &pb.RefreshTokenResponse{AccessToken: accessToken}, nil
 }
 
+func (h *Handler) DeleteRefreshToken(ctx context.Context, req *pb.DeleteRefreshTokenRequest) (*pb.DeleteRefreshTokenResponse, error) {
+	if req == nil || req.RefreshToken == "" {
+		return nil, status.Errorf(codes.InvalidArgument, controller.ErrInvalidRequest.Error())
+	}
+	err := h.ctrl.DeleteRefreshToken(ctx, req.RefreshToken)
+	if err != nil {
+		code, errMsg := mapToGRPCErrorCode(err), err.Error()
+		return nil, status.Errorf(code, errMsg)
+	}
+	return &pb.DeleteRefreshTokenResponse{Message: "refresh token successfully deleted"}, nil
+}
+
 // mapToGRPCErrorCode maps domain-specific errors to gRPC status codes.
 func mapToGRPCErrorCode(err error) codes.Code {
 	switch {
