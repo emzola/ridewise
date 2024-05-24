@@ -1,0 +1,42 @@
+syntax = "proto3";
+option go_package = "/authenticationservice/genproto";
+
+service AuthenticationService {
+    rpc GenerateOTP(GenerateOTPRequest) returns (GenerateOTPResponse);
+    rpc VerifyOTP(VerifyOTPRequest) returns (VerifyOTPResponse);
+    rpc RefreshToken(RefreshTokenRequest) returns (RefreshTokenResponse);
+    rpc DeleteRefreshToken(DeleteRefreshTokenRequest) returns (DeleteRefreshTokenResponse);
+}
+
+message GenerateOTPRequest {
+    string phone_number = 1;
+}
+
+message GenerateOTPResponse {
+    string otp = 1;
+}
+
+message VerifyOTPRequest {
+    string otp = 1;
+}
+
+message VerifyOTPResponse {
+    string access_token = 1;
+    string refresh_token = 2;
+}
+
+message RefreshTokenRequest {
+    string refresh_token = 1;
+}
+
+message RefreshTokenResponse {
+    string access_token = 1;
+}
+
+message DeleteRefreshTokenRequest {
+    string refresh_token = 1;
+}
+
+message DeleteRefreshTokenResponse {
+    string message = 1;
+}

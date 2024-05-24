@@ -5,7 +5,7 @@ import (
 	"errors"
 	"time"
 
-	pb "github.com/emzola/ridewise/genproto"
+	pb "github.com/emzola/ridewise/riderservice/genproto"
 	"github.com/emzola/ridewise/riderservice/internal/controller"
 	"github.com/emzola/ridewise/riderservice/internal/controller/rider"
 	"github.com/emzola/ridewise/riderservice/pkg/model"

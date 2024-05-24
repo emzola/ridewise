@@ -11,10 +11,10 @@ import (
 	"sync"
 	"syscall"
 
+	pb "github.com/emzola/ridewise/authenticationservice/genproto"
 	"github.com/emzola/ridewise/authenticationservice/internal/controller/auth"
 	grpcHandler "github.com/emzola/ridewise/authenticationservice/internal/handler/grpc"
 	"github.com/emzola/ridewise/authenticationservice/internal/repository/memory"
-	pb "github.com/emzola/ridewise/genproto"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 	"gopkg.in/yaml.v3"

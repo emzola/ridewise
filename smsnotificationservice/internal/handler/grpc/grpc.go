@@ -4,7 +4,7 @@ import (
 	"context"
 	"errors"
 
-	pb "github.com/emzola/ridewise/genproto"
+	pb "github.com/emzola/ridewise/smsnotificationservice/genproto"
 	"github.com/emzola/ridewise/smsnotificationservice/internal/controller"
 	"github.com/emzola/ridewise/smsnotificationservice/internal/controller/sms"
 	"google.golang.org/grpc/codes"

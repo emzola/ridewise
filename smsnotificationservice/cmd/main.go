@@ -11,7 +11,7 @@ import (
 	"sync"
 	"syscall"
 
-	pb "github.com/emzola/ridewise/genproto"
+	pb "github.com/emzola/ridewise/smsnotificationservice/genproto"
 	"github.com/emzola/ridewise/smsnotificationservice/internal/controller/sms"
 	grpcHandler "github.com/emzola/ridewise/smsnotificationservice/internal/handler/grpc"
 	"github.com/emzola/ridewise/smsnotificationservice/pkg/sms/httpsmsapi"

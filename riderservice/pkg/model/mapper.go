@@ -1,7 +1,7 @@
 package model
 
 import (
-	pb "github.com/emzola/ridewise/genproto"
+	pb "github.com/emzola/ridewise/riderservice/genproto"
 )
 
 // RiderToProto converts a Rider struct into a generated proto counterpart.

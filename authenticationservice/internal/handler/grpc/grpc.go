@@ -4,9 +4,9 @@ import (
 	"context"
 	"errors"
 
+	pb "github.com/emzola/ridewise/authenticationservice/genproto"
 	"github.com/emzola/ridewise/authenticationservice/internal/controller"
 	"github.com/emzola/ridewise/authenticationservice/internal/controller/auth"
-	pb "github.com/emzola/ridewise/genproto"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )

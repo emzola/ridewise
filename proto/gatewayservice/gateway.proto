@@ -1,0 +1,33 @@
+syntax = "proto3";
+option go_package = "/gatewayservice/genproto";
+
+service GatewayService {
+    rpc RequestOTP(RequestOTPRequest) returns (RequestOTPResponse);
+    rpc VerifyOTP(VerifyOTPRequest) returns (VerifyOTPResponse);
+    rpc Logout(LogoutRequest) returns (LogoutResponse);
+}
+
+message RequestOTPRequest {
+    string phone_number = 1;
+}
+
+message RequestOTPResponse {
+    string otp = 1;
+}
+
+message VerifyOTPRequest {
+    string otp = 1;
+}
+
+message VerifyOTPResponse {
+    string access_token = 1;
+    string refresh_token = 2;
+}
+
+message LogoutRequest {
+    string refresh_token = 1;
+}
+
+message LogoutResponse {
+    string message = 1;
+}

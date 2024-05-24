@@ -11,7 +11,7 @@ import (
 	"sync"
 	"syscall"
 
-	pb "github.com/emzola/ridewise/genproto"
+	pb "github.com/emzola/ridewise/riderservice/genproto"
 	"github.com/emzola/ridewise/riderservice/internal/controller/rider"
 	grpcHandler "github.com/emzola/ridewise/riderservice/internal/handler/grpc"
 	"github.com/emzola/ridewise/riderservice/internal/repository/memory"
