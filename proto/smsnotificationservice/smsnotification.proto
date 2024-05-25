@@ -1,4 +1,5 @@
 syntax = "proto3";
+package sms;
 option go_package = "/smsnotificationservice/genproto";
 
 service SMSNotificationService {

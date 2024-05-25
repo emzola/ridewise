@@ -19,10 +19,10 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	RiderService_CreateRider_FullMethodName = "/RiderService/CreateRider"
-	RiderService_GetRider_FullMethodName    = "/RiderService/GetRider"
-	RiderService_UpdateRider_FullMethodName = "/RiderService/UpdateRider"
-	RiderService_DeleteRider_FullMethodName = "/RiderService/DeleteRider"
+	RiderService_CreateRider_FullMethodName = "/rider.RiderService/CreateRider"
+	RiderService_GetRider_FullMethodName    = "/rider.RiderService/GetRider"
+	RiderService_UpdateRider_FullMethodName = "/rider.RiderService/UpdateRider"
+	RiderService_DeleteRider_FullMethodName = "/rider.RiderService/DeleteRider"
 )
 
 // RiderServiceClient is the client API for RiderService service.
@@ -195,7 +195,7 @@ func _RiderService_DeleteRider_Handler(srv interface{}, ctx context.Context, dec
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var RiderService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "RiderService",
+	ServiceName: "rider.RiderService",
 	HandlerType: (*RiderServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{

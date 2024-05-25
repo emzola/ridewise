@@ -19,10 +19,10 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	AuthenticationService_GenerateOTP_FullMethodName        = "/AuthenticationService/GenerateOTP"
-	AuthenticationService_VerifyOTP_FullMethodName          = "/AuthenticationService/VerifyOTP"
-	AuthenticationService_RefreshToken_FullMethodName       = "/AuthenticationService/RefreshToken"
-	AuthenticationService_DeleteRefreshToken_FullMethodName = "/AuthenticationService/DeleteRefreshToken"
+	AuthenticationService_GenerateOTP_FullMethodName        = "/authentication.AuthenticationService/GenerateOTP"
+	AuthenticationService_VerifyOTP_FullMethodName          = "/authentication.AuthenticationService/VerifyOTP"
+	AuthenticationService_RefreshToken_FullMethodName       = "/authentication.AuthenticationService/RefreshToken"
+	AuthenticationService_DeleteRefreshToken_FullMethodName = "/authentication.AuthenticationService/DeleteRefreshToken"
 )
 
 // AuthenticationServiceClient is the client API for AuthenticationService service.
@@ -195,7 +195,7 @@ func _AuthenticationService_DeleteRefreshToken_Handler(srv interface{}, ctx cont
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var AuthenticationService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "AuthenticationService",
+	ServiceName: "authentication.AuthenticationService",
 	HandlerType: (*AuthenticationServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{

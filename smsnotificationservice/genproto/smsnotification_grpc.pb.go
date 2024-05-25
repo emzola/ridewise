@@ -19,7 +19,7 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	SMSNotificationService_SendSMS_FullMethodName = "/SMSNotificationService/SendSMS"
+	SMSNotificationService_SendSMS_FullMethodName = "/sms.SMSNotificationService/SendSMS"
 )
 
 // SMSNotificationServiceClient is the client API for SMSNotificationService service.
@@ -97,7 +97,7 @@ func _SMSNotificationService_SendSMS_Handler(srv interface{}, ctx context.Contex
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var SMSNotificationService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "SMSNotificationService",
+	ServiceName: "sms.SMSNotificationService",
 	HandlerType: (*SMSNotificationServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{

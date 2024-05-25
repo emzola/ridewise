@@ -1,4 +1,5 @@
 syntax = "proto3";
+package rider;
 option go_package = "/riderservice/genproto";
 
 service RiderService {
