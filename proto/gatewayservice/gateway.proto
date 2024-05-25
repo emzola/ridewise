@@ -1,4 +1,5 @@
 syntax = "proto3";
+package gateway;
 option go_package = "/gatewayservice/genproto";
 
 service GatewayService {
@@ -12,7 +13,7 @@ message RequestOTPRequest {
 }
 
 message RequestOTPResponse {
-    string otp = 1;
+    string message = 1;
 }
 
 message VerifyOTPRequest {

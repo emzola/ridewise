@@ -22,6 +22,7 @@ create_dirs:
 	@mkdir -p $(AUTHENTICATION_OUT_DIR)
 	@mkdir -p $(RIDER_OUT_DIR)
 	@mkdir -p $(SMS_NOTIFICATION_OUT_DIR)
+	@mkdir -p $(GATEWAY_OUT_DIR)
 
 # Define the protoc command
 PROTOC := protoc
@@ -30,7 +31,7 @@ PROTOC_GEN_GRPC_GO := protoc-gen-go-grpc
 
 # Generate the protobuf files
 .PHONY: proto
-proto: create_dirs authentication_proto rider_proto sms_notification_proto
+proto: create_dirs authentication_proto rider_proto sms_notification_proto gateway_proto
 
 authentication_proto: $(AUTHENTICATION_PROTO)
 	$(PROTOC) --go_out=. --go-grpc_out=. $(AUTHENTICATION_PROTO)
@@ -53,20 +54,25 @@ clean:
 	rm -f $(GATEWAY_OUT_DIR)/*.pb.go
 
 # ==================================================================================== #
-# RUN SERVICES IN DEVELOPMENT
+# RUN MICROSERVICES
 # ==================================================================================== #
 	
-## run/rider: run the rider service
+# Run the rider service
 .PHONY: run_rider
-run/rider:
+run_rider:
 	@go run riderservice/cmd/*.go
 
-## run/authentication: run the authentication service
+# Run the authentication service
 .PHONY: run_authentication
-run/authentication:
+run_authentication:
 	@go run authenticationservice/cmd/*.go
 
-## run/sms: run the sms notification service
+# Run the sms notification service
 .PHONY: run_sms
-run/sms:
+run_sms:
 	@go run smsnotificationservice/cmd/*.go
+
+# Run the gateway service
+.PHONY: run_gateway
+run_gateway:
+	@go run gatewayservice/cmd/*.go
