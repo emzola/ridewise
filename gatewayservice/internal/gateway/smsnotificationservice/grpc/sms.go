@@ -3,19 +3,21 @@ package grpc
 import (
 	"context"
 
+	"github.com/emzola/ridewise/internal/grpcutil"
+	"github.com/emzola/ridewise/pkg/discovery"
 	pb "github.com/emzola/ridewise/smsnotificationservice/genproto"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/credentials/insecure"
 )
 
-type Gateway struct{}
+type Gateway struct {
+	registry discovery.Registry
+}
 
-func New() *Gateway {
-	return &Gateway{}
+func New(registry discovery.Registry) *Gateway {
+	return &Gateway{registry}
 }
 
 func (g *Gateway) Send(ctx context.Context, message, from, to string) (string, error) {
-	conn, err := grpc.NewClient("localhost:8083", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpcutil.ServiceConnection(ctx, "smsnotificationservice", g.registry)
 	if err != nil {
 		return "", err
 	}

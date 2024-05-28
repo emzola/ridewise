@@ -10,7 +10,10 @@ import (
 	"path/filepath"
 	"sync"
 	"syscall"
+	"time"
 
+	"github.com/emzola/ridewise/pkg/discovery"
+	memoryServiceDiscovery "github.com/emzola/ridewise/pkg/discovery/memory"
 	pb "github.com/emzola/ridewise/riderservice/genproto"
 	"github.com/emzola/ridewise/riderservice/internal/controller/rider"
 	grpcHandler "github.com/emzola/ridewise/riderservice/internal/handler/grpc"
@@ -19,6 +22,8 @@ import (
 	"google.golang.org/grpc/reflection"
 	"gopkg.in/yaml.v3"
 )
+
+const serviceName = "riderservice"
 
 func main() {
 	logHandler := slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{Level: slog.LevelDebug})
@@ -39,8 +44,22 @@ func main() {
 	port := cfg.API.Port
 	logger.Info("starting the rider service", slog.Int("port", port))
 
-	_, cancel := context.WithCancel(context.Background())
+	ctx, cancel := context.WithCancel(context.Background())
 
+	registry := memoryServiceDiscovery.NewRegistry()
+	instanceID := discovery.GenerateInstanceID(serviceName)
+	if err := registry.Register(ctx, instanceID, serviceName, fmt.Sprintf("localhost:%d", port)); err != nil {
+		panic(err)
+	}
+	go func() {
+		for {
+			if err := registry.ReportHealthyState(instanceID, serviceName); err != nil {
+				logger.Error("failed to report healthy state", slog.Any("error", err))
+			}
+			time.Sleep(1 * time.Second)
+		}
+	}()
+	defer registry.Deregister(ctx, instanceID, serviceName)
 	repo := memory.New()
 	ctrl := rider.New(repo)
 	handler := grpcHandler.New(ctrl)

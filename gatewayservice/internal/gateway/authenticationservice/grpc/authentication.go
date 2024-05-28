@@ -4,18 +4,20 @@ import (
 	"context"
 
 	pb "github.com/emzola/ridewise/authenticationservice/genproto"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/credentials/insecure"
+	"github.com/emzola/ridewise/internal/grpcutil"
+	"github.com/emzola/ridewise/pkg/discovery"
 )
 
-type Gateway struct{}
+type Gateway struct {
+	registry discovery.Registry
+}
 
-func New() *Gateway {
-	return &Gateway{}
+func New(registry discovery.Registry) *Gateway {
+	return &Gateway{registry}
 }
 
 func (g *Gateway) GenerateOTP(ctx context.Context, phoneNumber string) (string, error) {
-	conn, err := grpc.NewClient("localhost:8082", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpcutil.ServiceConnection(ctx, "authenticationservice", g.registry)
 	if err != nil {
 		return "", err
 	}

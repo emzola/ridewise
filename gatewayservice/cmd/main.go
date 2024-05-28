@@ -10,16 +10,21 @@ import (
 	"path/filepath"
 	"sync"
 	"syscall"
+	"time"
 
 	pb "github.com/emzola/ridewise/gatewayservice/genproto"
 	"github.com/emzola/ridewise/gatewayservice/internal/controller/gateway"
 	authenticationGateway "github.com/emzola/ridewise/gatewayservice/internal/gateway/authenticationservice/grpc"
 	smsNotificationGateway "github.com/emzola/ridewise/gatewayservice/internal/gateway/smsnotificationservice/grpc"
 	grpcHandler "github.com/emzola/ridewise/gatewayservice/internal/handler/grpc"
+	"github.com/emzola/ridewise/pkg/discovery"
+	memoryServiceDiscovery "github.com/emzola/ridewise/pkg/discovery/memory"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 	"gopkg.in/yaml.v3"
 )
+
+const serviceName = "gatewayservice"
 
 func main() {
 	logHandler := slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{Level: slog.LevelDebug})
@@ -40,11 +45,25 @@ func main() {
 	port := cfg.API.Port
 	logger.Info("starting the gateway service", slog.Int("port", port))
 
-	_, cancel := context.WithCancel(context.Background())
+	ctx, cancel := context.WithCancel(context.Background())
 
+	registry := memoryServiceDiscovery.NewRegistry()
+	instanceID := discovery.GenerateInstanceID(serviceName)
+	if err := registry.Register(ctx, instanceID, serviceName, fmt.Sprintf("localhost:%d", port)); err != nil {
+		panic(err)
+	}
+	go func() {
+		for {
+			if err := registry.ReportHealthyState(instanceID, serviceName); err != nil {
+				logger.Error("failed to report healthy state", slog.Any("error", err))
+			}
+			time.Sleep(1 * time.Second)
+		}
+	}()
+	defer registry.Deregister(ctx, instanceID, serviceName)
 	ctrl := gateway.New(
-		authenticationGateway.New(),
-		smsNotificationGateway.New(),
+		authenticationGateway.New(registry),
+		smsNotificationGateway.New(registry),
 	)
 	handler := grpcHandler.New(ctrl)
 	lis, err := net.Listen("tcp", fmt.Sprintf("localhost:%v", port))
