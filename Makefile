@@ -54,25 +54,30 @@ clean:
 	rm -f $(GATEWAY_OUT_DIR)/*.pb.go
 
 # ==================================================================================== #
-# RUN MICROSERVICES
+# DEVELOPMENT
 # ==================================================================================== #
 	
 # Run the rider service
-.PHONY: run_rider
-run_rider:
+.PHONY: rider
+rider:
 	@go run riderservice/cmd/*.go
 
 # Run the authentication service
-.PHONY: run_authentication
-run_authentication:
+.PHONY: authentication
+authentication:
 	@go run authenticationservice/cmd/*.go
 
 # Run the sms notification service
-.PHONY: run_sms
-run_sms:
+.PHONY: sms
+sms:
 	@go run smsnotificationservice/cmd/*.go
 
 # Run the gateway service
-.PHONY: run_gateway
-run_gateway:
+.PHONY: gateway
+gateway:
 	@go run gatewayservice/cmd/*.go
+
+# Run Hashicorp Consul locally
+.PHONY: consul
+consul:
+	docker run -d -p 8500:8500 -p 8600:8600/udp --name=ridewise-dev-consul hashicorp/consul agent -server -ui -node=server-1 -bootstrap-expect=1 -client=0.0.0.0

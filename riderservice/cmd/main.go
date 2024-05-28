@@ -13,7 +13,7 @@ import (
 	"time"
 
 	"github.com/emzola/ridewise/pkg/discovery"
-	memoryServiceDiscovery "github.com/emzola/ridewise/pkg/discovery/memory"
+	consul "github.com/emzola/ridewise/pkg/discovery/consul"
 	pb "github.com/emzola/ridewise/riderservice/genproto"
 	"github.com/emzola/ridewise/riderservice/internal/controller/rider"
 	grpcHandler "github.com/emzola/ridewise/riderservice/internal/handler/grpc"
@@ -46,7 +46,10 @@ func main() {
 
 	ctx, cancel := context.WithCancel(context.Background())
 
-	registry := memoryServiceDiscovery.NewRegistry()
+	registry, err := consul.NewRegistry("localhost:8500")
+	if err != nil {
+		panic(err)
+	}
 	instanceID := discovery.GenerateInstanceID(serviceName)
 	if err := registry.Register(ctx, instanceID, serviceName, fmt.Sprintf("localhost:%d", port)); err != nil {
 		panic(err)

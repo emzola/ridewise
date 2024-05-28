@@ -18,7 +18,7 @@ import (
 	smsNotificationGateway "github.com/emzola/ridewise/gatewayservice/internal/gateway/smsnotificationservice/grpc"
 	grpcHandler "github.com/emzola/ridewise/gatewayservice/internal/handler/grpc"
 	"github.com/emzola/ridewise/pkg/discovery"
-	memoryServiceDiscovery "github.com/emzola/ridewise/pkg/discovery/memory"
+	consul "github.com/emzola/ridewise/pkg/discovery/consul"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 	"gopkg.in/yaml.v3"
@@ -47,7 +47,10 @@ func main() {
 
 	ctx, cancel := context.WithCancel(context.Background())
 
-	registry := memoryServiceDiscovery.NewRegistry()
+	registry, err := consul.NewRegistry("localhost:8500")
+	if err != nil {
+		panic(err)
+	}
 	instanceID := discovery.GenerateInstanceID(serviceName)
 	if err := registry.Register(ctx, instanceID, serviceName, fmt.Sprintf("localhost:%d", port)); err != nil {
 		panic(err)
